@@ -25,10 +25,17 @@ def register():
         cursor.execute("INSERT INTO user_map (username, password) VALUES (?, ?)", (username, password))
         conn.commit()
 
+        # ユーザーIDを取得
+        cursor.execute("SELECT user_id FROM user_map WHERE username = ?", (username,))
+        user_id = cursor.fetchone()[0]
+
+
         # 接続を閉じる
         close_db_connection(conn)
 
-        return redirect(url_for('auth.login'))  # ログインページにリダイレクト
+        session['user_id'] = user_id
+
+        return redirect(url_for('reviews.profile'))  # ログインページにリダイレクト
 
     return render_template('register.html')  # ユーザー登録フォームを表示
 
