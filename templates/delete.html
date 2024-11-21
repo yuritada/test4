@@ -7,14 +7,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>ようこそ、{{ username }} さんのプロフィールページ</h1>
+        <h1>ようこそ、{{ username }} さんのデリートページ</h1>
 
         <!-- ユーザーの口コミ評価一覧 -->
-        <h2>あなたの口コミ一覧</h2>
+        <h2>あなたの口コミ一覧 消したい口コミを選ぶ</h2>
         {% if evaluation %}
+        <form method="POST">
         <table>
             <thead>
                 <tr>
+                    <!--  各段にチェックリストを追加 -->
+                    <th>選択</th>
                     <th>訪れた場所</th>
                     <th>場所の評価</th>
                     <th>態度の評価</th>
@@ -26,6 +29,7 @@
             <tbody>
                 {% for review in evaluation %}
                 <tr>
+                    <td><input type="checkbox" name="delete" value="{{ review[0] }}"></td>
                     <td>{{ review[2] }}</td>
                     <td>{{ review[3] }}</td>
                     <td>{{ review[4] }}</td>
@@ -42,16 +46,18 @@
                 {% endfor %}
             </tbody>
         </table>
+            <button type="submit" class="btn logout-btn">選択した口コミを削除</button>
+        </form>
+
         {% else %}
         <p>まだ口コミがありません。</p>
         {% endif %}
 
         <!-- 口コミ追加ページへのリンク -->
         <div class="actions">
-            <a href="{{ url_for('reviews.add') }}" class="btn">新しい口コミを追加する</a> 
-            <a href="{{ url_for('reviews.delete') }}" class="btn logout-btn">口コミを削除</a>
             <a href="{{ url_for('main.home') }}" class="btn">全ユーザの口コミを見る</a>
-            <a href="{{ url_for('auth.logout') }}" class="btn logout-btn">ログアウト</a>
+            <a href="{{ url_for('main.home') }}" class="btn">口コミ一覧に戻る</a>
+
         </div>
     </div>
 </body>

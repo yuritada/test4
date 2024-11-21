@@ -44,7 +44,7 @@ def add():
 @reviews_bp.route('/profile')
 def profile():
     if 'user_id' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
 
     user_id = session['user_id']
     conn = get_db_connection()
@@ -57,3 +57,39 @@ def profile():
     close_db_connection(conn)
 
     return render_template('profile.html', evaluation=evaluation, username=username)
+
+@reviews_bp.route('/delete', methods=['GET', 'POST'])
+def delete():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    
+    user_id = session['user_id']
+    
+    if request.method == 'POST':
+        # チェックボックスで選択された削除対象のIDを取得
+        delete_ids = request.form.getlist('delete')
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # 選択された各IDに対して削除を実行
+        for delete_id in delete_ids:
+            cursor.execute("DELETE FROM evaluation WHERE review_id = ? AND user_id = ?", (delete_id, user_id))
+        
+        conn.commit()
+        close_db_connection(conn)
+        
+        # 削除後にプロフィールページにリダイレクト
+        return redirect(url_for('reviews.profile'))
+    
+    # GETリクエスト時の処理（削除対象選択画面）
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM evaluation WHERE user_id = ?", (user_id,))
+    evaluation = cursor.fetchall()
+    cursor.execute("SELECT username FROM user_map WHERE user_id = ?", (user_id,))
+    result = cursor.fetchone()
+    username = result[0] if result else "Unknown"
+    close_db_connection(conn)
+
+    return render_template('delete.html', evaluation=evaluation, username=username)
