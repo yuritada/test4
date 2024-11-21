@@ -34,7 +34,6 @@ def register():
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    global userid
     """ユーザーログイン"""
     if request.method == 'POST':
         username = request.form['username']

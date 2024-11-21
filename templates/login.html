@@ -6,10 +6,24 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <h1>ログイン</h1>
     <form method="POST">
-        <label>ユーザ名: <input type="text" name="username" required></label><br>
-        <label>パスワード: <input type="password" name="password" required></label><br>
+        <label for="username">ユーザ名:</label>
+        <input type="text" id="username" name="username" 
+               required minlength="4" maxlength="20"
+               placeholder="ユーザ名を入力">
+        
+        <label for="password">パスワード:</label>
+        <input type="password" id="password" name="password" 
+               required minlength="8" 
+               placeholder="パスワードを入力">
+        
+        {% if error %}
+        <div class="error-message">{{ error }}</div>
+        {% endif %}
+        
         <button type="submit">ログイン</button>
+    </form>
     </form>
     <p><a href="{{ url_for('auth.register') }}">新規登録はこちら</a></p>
 </body>
