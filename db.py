@@ -31,6 +31,12 @@ def init_db():
         )
     ''')
 
+    # 初期データを挿入
+    cursor.execute("INSERT OR IGNORE INTO user_map (username, password) VALUES ('admin', '1234567890')")
+    cursor.execute("INSERT OR IGNORE INTO user_map (username, password) VALUES ('user', 'password')")
+    cursor.execute("INSERT OR IGNORE INTO evaluation (user_id, visited, place, attitude, price, speed, image_path) VALUES (1,'hoge', 5, 4, 3, 2, 'static/uploads/e_1114.png')")
+    cursor.execute("INSERT OR IGNORE INTO evaluation (user_id, visited, place, attitude, price, speed, image_path) VALUES (2,'hage', 3, 2, 1, 5, 'static/uploads/IMG20241120193501.jpg')")
+
     conn.commit()
     conn.close()
     print("データベースが初期化されました")
