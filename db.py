@@ -6,6 +6,9 @@ def init_db():
     """データベースを初期化し、必要なテーブルを作成"""
     conn = sqlite3.connect(DB_PATH)  # データベース接続を開く
     cursor = conn.cursor()
+    # テーブルが存在する場合は削除
+    cursor.execute('DROP TABLE IF EXISTS user_map')
+    cursor.execute('DROP TABLE IF EXISTS evaluation')
 
     # ユーザー管理テーブルを作成
     cursor.execute('''
