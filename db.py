@@ -1,14 +1,24 @@
 import sqlite3
+import os
+
 
 DB_PATH = 'travel.db'
 
 def init_db():
     """データベースを初期化し、必要なテーブルを作成"""
+    
+    # ファイル名を指定
+    file_name = "travel.db"
+
+    # ファイルがディレクトリ内に存在するか確認
+    if os.path.exists(file_name):
+        # 存在する場合は削除
+        os.remove(file_name)
+        print(f"{file_name} を削除しました。")
+    else:
+        print(f"{file_name} は存在しません。")
     conn = sqlite3.connect(DB_PATH)  # データベース接続を開く
-    cursor = conn.cursor()
-    # テーブルが存在する場合は削除
-    cursor.execute('DROP TABLE IF EXISTS user_map')
-    cursor.execute('DROP TABLE IF EXISTS evaluation')
+    cursor = conn.cursor()  # カーソルを取得
 
     # ユーザー管理テーブルを作成
     cursor.execute('''
